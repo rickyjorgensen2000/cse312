@@ -1,7 +1,7 @@
 FROM python:3.8
 
-ENV HOME /root/web_server
-WORKDIR /root/web_server
+ENV HOME /root/flaskr
+WORKDIR /root/flaskr
 
 COPY . .
 
@@ -13,7 +13,7 @@ ADD https://github.com/ufoscout/docker-compose-wait/releases/download/2.2.1/wait
 
 RUN chmod +x /wait
 
-ENV FLASK_APP web_server
+ENV FLASK_APP flaskr
 ENV FLASK_DEBUG 1
 
 CMD /wait && flask run
