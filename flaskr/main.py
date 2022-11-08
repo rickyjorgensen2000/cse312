@@ -17,6 +17,3 @@ def index():
 def profile():
     return render_template('profile.html',current_user = current_user.__name)
 
-
-if __name__ == '__main__':
-    main.run(debug=True,host='0.0.0.0')

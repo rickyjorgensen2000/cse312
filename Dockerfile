@@ -16,4 +16,4 @@ RUN chmod +x /wait
 ENV FLASK_APP flaskr
 ENV FLASK_DEBUG 1
 
-CMD /wait && flask run
+CMD /wait && flask run --host=0.0.0.0
