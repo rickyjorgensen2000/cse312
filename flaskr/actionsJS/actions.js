@@ -1,10 +1,14 @@
 function startGame() {
     const request = new XMLHttpRequest();
     const startPath = '/startGame'
-    const startButton = document.getElementById('startButton').onclick
-
-    const startState = function () {
-        request.open('GET', startPath);
-        request.send();
-    };
+    request.open('GET', startPath);
+    request.send();
 }
+
+function login() {
+    const request = new XMLHttpRequest()
+    const nextPath = '/home'
+    request.open('GET', nextPath);
+    request.send();
+}
+
