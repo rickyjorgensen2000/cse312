@@ -33,11 +33,11 @@ button {
     border: 3px solid black; 
     border-radius: 5%;
     width: 15%;
-    height: 15;
+    height: 15%;
 
 }
 
-.button:hover {
-    background-color: #4CAF50; /* Green */
+button:hover {
+    background-color: #00bd9c; 
     color: white;
   }
