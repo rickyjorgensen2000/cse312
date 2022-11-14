@@ -13,8 +13,19 @@ leaderboard = db['leaderboard']
 # add user as {'username' : username, 'wins' : '0', 'loss' : '0'}
 
 
-def add_user(username):
-    user_collection.insert_one({'username': username, 'wins': 0, 'loss': 0})
+def add_user(username, password):
+    record = {'username': username, 'password': password, 'wins': 0, 'loss': 0}
+    user_collection.insert_one(record)
+    leaderboard.insertone({username: 0})
+
+
+def check_for_user(username):
+    result = user_collection.find_one({'username': username})
+    if result is not None:
+        return result
+    else:
+        return None
+
 
 # add a win or loss to the users stats
 
