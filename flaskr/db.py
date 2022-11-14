@@ -1,6 +1,7 @@
 from flask import Flask
 from flask_pymongo import PyMongo
 from operator import itemgetter
+import sys
 # Initialize mongo db with app
 app = Flask(__name__)
 
@@ -16,11 +17,12 @@ leaderboard = db['leaderboard']
 def add_user(username, password):
     record = {'username': username, 'password': password, 'wins': 0, 'loss': 0}
     user_collection.insert_one(record)
-    leaderboard.insertone({username: 0})
+    leaderboard.insert_one({username: 0})
 
 
 def check_for_user(username):
     result = user_collection.find_one({'username': username})
+    print(result, file=sys.stderr)
     if result is not None:
         return result
     else:
@@ -72,3 +74,9 @@ def get_leaderboard():
         rank += 1
     return return_leaderboard
 
+
+
+if __name__ == "__main__":
+    add_user("username", "password")
+    # user_collection.find_one({'username': 'username'})
+    # print(check_for_user("username"))
