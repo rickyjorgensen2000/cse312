@@ -40,36 +40,48 @@ def update_player_stats(username: str, stat_to_change: str, increment: int):
         loss += increment
     new_record = {'$set': {'username': username, 'wins': wins, 'loss': loss}}
     user_collection.update_one({'username': username}, new_record)
-
-
-# change users score to {'username' : username, 'score' : new_score}...
+    update_leaderboard(record['username'])
+# change users score to {'username' : username, 'score' : new_score}... or insert if not there
 # score will be an integer that ranks the player based on # games played and W/L ratio
 
 
-def update_leaderboard(username, new_score):
-    record = leaderboard.find_one({'username': username})
-    if record is not None:
-        new_record = {'username': username, 'score': new_score}
-        leaderboard.update_one({'username': username}, record)
-        return True
+def update_leaderboard(username):
+    user = user_collection.find_one({'username': username})
+    old_record = leaderboard.find({})
+    old_score = None
+    for record in old_record:
+        data = record.popitem()
+        if data[0] == user['username']:
+            old_score = data[1]
+    games_played = user['wins'] + user['loss']
+    win_loss = user['wins'] - user['loss']
+    new_score = 0
+    if win_loss > 0:
+        new_score = games_played * win_loss
     else:
-        return False
+        new_score = games_played * 0.5
+    new_record = {'$set': {user['username']: new_score}}
+    leaderboard.update_one({user['username']: old_score}, new_record)
+
 
 # returns a dictionary of form {rank : [score, username]}
 
 
 def get_leaderboard():
-    records = leaderboard.find_all({})
+    records = leaderboard.find({})
     record_list = []
     # add all the users to a List of List to be sorted by score
     for record in records:
-        record_list.append([record['score'], record['username']])
+        item = record.popitem()
+        username = item[0]
+        score = item[1]
+        record_list.append([score, username])
     sorted_list = sorted(record_list, key=itemgetter(0))
     return_leaderboard = {}
-    rank = 1
+    rank = len(record_list)
     for user in sorted_list:
         return_leaderboard[rank] = user
-        rank += 1
+        rank -= 1
     return return_leaderboard
 
 
