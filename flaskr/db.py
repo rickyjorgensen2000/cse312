@@ -16,7 +16,7 @@ leaderboard = db['leaderboard']
 def add_user(username, password):
     record = {'username': username, 'password': password, 'wins': 0, 'loss': 0}
     user_collection.insert_one(record)
-    leaderboard.insertone({username: 0})
+    leaderboard.insert_one({username: 0})
 
 
 def check_for_user(username):
@@ -72,3 +72,6 @@ def get_leaderboard():
         rank += 1
     return return_leaderboard
 
+
+def drop(collection):
+    collection.drop()
