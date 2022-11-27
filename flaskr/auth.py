@@ -14,11 +14,11 @@ def login():
 @auth.route('/login', methods=['POST'])
 def login_post():
     # login code goes here
-    email = request.form.get('email')
+    name = request.form.get('name')
     password = request.form.get('password')
     remember = True if request.form.get('remember') else False
 
-    user = user_collection.find_one({'email': email})
+    user = user_collection.find_one({'username': name})
 
     # check if the user actually exists
     # take the user-supplied password, hash it, and compare it to the hashed password in the database
@@ -50,7 +50,6 @@ def signup_post():
 
     # if this returns None the username doesn't already exist
     user = flaskr.db.check_for_user(username)
-    # print(user)
     if user:  # if a user is found, we want to redirect back to signup page so user can try again
         flash('Email address already exists')
         return redirect(url_for('auth.signup'))
