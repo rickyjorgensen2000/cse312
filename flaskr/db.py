@@ -1,6 +1,7 @@
 from flask import Flask
 from flask_pymongo import PyMongo
 from operator import itemgetter
+from flask_login import LoginManager
 # Initialize mongo db with app
 app = Flask(__name__)
 
@@ -88,3 +89,5 @@ def get_leaderboard():
 
 def drop(collection):
     collection.drop()
+
+
