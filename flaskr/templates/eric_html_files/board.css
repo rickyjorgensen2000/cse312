@@ -1,0 +1,32 @@
+body {
+    background-color: #333030;
+    color: #00bd9c;
+    
+    
+}
+
+h1 {
+    text-align:center; 
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    font-size:500%;
+}
+
+td {
+    width: 125px;
+    height: 125px;
+  }
+  table {
+    margin: 5px auto;
+  }
+  .vert {
+    border-left: 4px solid black;
+    border-right: 4px solid black;
+  }
+  .hori {
+    border-top: 4px solid black;
+    border-bottom: 4px solid black;
+  }
+
+  .button1{
+    color: black;
+  }
