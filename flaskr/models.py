@@ -1,10 +1,10 @@
-"""import bcrypt
+import bcrypt
 from flaskr.db import *
 from flask import *
 from flask_login import LoginManager, UserMixin
 
 
-class User:
+class User(UserMixin):
     def __init__(self, username):
         self.username = username
 
@@ -27,9 +27,3 @@ class User:
     def check_password(password_hash, password):
         return bcrypt.checkpw(password_hash, password)
 
-    @login.user_loader
-    def load_user(username):
-        u = user_collection.find_one({"Name": username})
-        if not u:
-            return None
-        return User(username=u['Name'])"""

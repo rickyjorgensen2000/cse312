@@ -1,14 +1,15 @@
 import os
 from flask import Flask
 from flask_login import LoginManager
+import flaskr.db
+from flaskr.models import User
 
 
 def create_app(test_config=None):
     app = Flask(__name__, instance_relative_config=True)
     login = LoginManager()
     login.init_app(app)
-    login.login_view = 'auth.login'
-
+    # login.login_view = 'login'
 
     app.config.from_mapping(
         SECRET_KEY='dev',
@@ -36,5 +37,14 @@ def create_app(test_config=None):
     # blueprint for non-auth parts of app
     from .main import main as main_blueprint
     app.register_blueprint(main_blueprint)
+
+
+    @login.user_loader
+    def load_user(username):
+        # u = flaskr.db.user_collection.find_one({"Name": username})
+        u = flaskr.db.check_for_user(username)
+        if not u:
+            return None
+        return User(username=u['username'])
 
     return app
