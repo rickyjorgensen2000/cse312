@@ -16,6 +16,7 @@ socket.onmessage = function (ws_message) {
 function triggerButton (buttonID) {
     let button = document.getElementById(buttonID);
     if (player === 'X') {
+        button.style.opacity = 1
         button.innerText = 'X';
     }
     if (player === 'O') {
