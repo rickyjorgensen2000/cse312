@@ -30,5 +30,20 @@ def game():
 
 
 @main.route('/board')
+@login_required
 def board():
     return render_template('eric_html_files/screen_two.html')
+
+@main.route('/leaderboard')
+@login_required
+def leaderboard():
+    all_users_data_dict = db.get_leaderboard()
+    rank=[]
+    record=[]
+    print(all_users_data_dict)
+
+    for key in all_users_data_dict:
+        rank.append(rank)
+        record.append(all_users_data_dict[key])
+
+    return render_template('leaderboard.html', win_loss_list = record)
