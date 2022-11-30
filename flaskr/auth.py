@@ -3,6 +3,7 @@ from flask import Blueprint, render_template, redirect, url_for, flash, request
 from flaskr.db import user_collection
 import flaskr.db, bcrypt, sys
 from flaskr.models import User
+import html
 
 auth = Blueprint('auth', __name__)
 
@@ -14,7 +15,8 @@ def login():
 @auth.route('/login', methods=['POST'])
 def login_post():
     # login code goes here
-    name = request.form.get('name')
+    username = request.form.get('name')
+    name = html.escape(username)
     password = request.form.get('password')
     remember = True if request.form.get('remember') else False
 
@@ -45,17 +47,18 @@ def logout():
 @auth.route('/signup', methods=['POST'])
 def signup_post():
     username  = request.form.get('name')
+    name = html.escape(username)
     password = request.form.get('password')
     # hashes and salts the password for storage in the database
     hashed_password = bcrypt.hashpw(password.encode(), bcrypt.gensalt())
 
     # if this returns None the username doesn't already exist
-    user = flaskr.db.check_for_user(username)
+    user = flaskr.db.check_for_user(name)
     if user:  # if a user is found, we want to redirect back to signup page so user can try again
         flash('Email address already exists')
         return redirect(url_for('auth.signup'))
 
     # adds a new user to the database with the hashed and salted password
-    flaskr.db.add_user(username, hashed_password)
+    flaskr.db.add_user(name, hashed_password)
 
     return redirect(url_for('auth.login'))
