@@ -20,3 +20,7 @@ def profile():
     users_data = db.check_for_user(current_user.username)
     return render_template('profile.html', name = current_user.username, wins = users_data.get('wins'), losses = users_data.get('loss'))
 
+@main.route('/game')
+@login_required
+def game():
+    return render_template('eric_html_files/screen_one.html')
