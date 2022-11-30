@@ -16,7 +16,7 @@ leaderboard = db['leaderboard']
 
 
 def add_user(username, password):
-    record = {'username': username, 'password': password, 'wins': 0, 'loss': 0}
+    record = {'username': username, 'password': password, 'wins': 0, 'loss': 0, 'draw': 0}
     user_collection.insert_one(record)
     leaderboard.insert_one({username: 0})
 
@@ -36,11 +36,14 @@ def update_player_stats(username: str, stat_to_change: str, increment: int):
     record = user_collection.find_one({'username': username})
     wins = record['wins']
     loss = record['loss']
+    draws = record['draw']
     if stat_to_change == 'wins':
         wins += increment
     elif stat_to_change == 'loss':
         loss += increment
-    new_record = {'$set': {'username': username, 'wins': wins, 'loss': loss}}
+    elif stat_to_change == 'draw':
+        draws += increment
+    new_record = {'$set': {'username': username, 'wins': wins, 'loss': loss, 'draw': draws}}
     user_collection.update_one({'username': username}, new_record)
     update_leaderboard(record['username'])
 # change users score to {'username' : username, 'score' : new_score}... or insert if not there
