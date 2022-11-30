@@ -14,13 +14,21 @@ main = Blueprint('main', __name__)
 def index():
     return render_template('index.html')
 
+
 @main.route('/profile')
 @login_required
 def profile():
     users_data = db.check_for_user(current_user.username)
-    return render_template('profile.html', name = current_user.username, wins = users_data.get('wins'), draws = users_data.get('draw'), losses = users_data.get('loss'))
+    return render_template('profile.html', name=current_user.username, wins=users_data.get('wins'),
+                           draws=users_data.get('draw'), losses=users_data.get('loss'))
+
 
 @main.route('/game')
 @login_required
 def game():
     return render_template('eric_html_files/screen_one.html')
+
+
+@main.route('/board')
+def board():
+    return render_template('eric_html_files/screen_two.html')

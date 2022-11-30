@@ -3,6 +3,7 @@ from flask import Blueprint, render_template, redirect, url_for, flash, request
 from flaskr.db import user_collection
 import flaskr.db, bcrypt, sys
 from flaskr.models import User
+import html
 
 auth = Blueprint('auth', __name__)
 
@@ -44,7 +45,8 @@ def logout():
 
 @auth.route('/signup', methods=['POST'])
 def signup_post():
-    name  = request.form.get('name')
+    username  = request.form.get('name')
+    name = html.escape(username)
     password = request.form.get('password')
     # hashes and salts the password for storage in the database
     hashed_password = bcrypt.hashpw(password.encode(), bcrypt.gensalt())
