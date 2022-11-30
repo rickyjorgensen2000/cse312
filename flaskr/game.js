@@ -38,6 +38,6 @@ function triggerButton (buttonID) {
         }
         button.style.visibility = 'visible'
         state = 0;
-        socket.send()
+
     }
 }
