@@ -4,7 +4,7 @@ try:
     from flask_login import login_required, current_user
     import flaskr.db as db
     import flaskr.globals as globals
-    from flask_socketio import emit
+    from flask_socketio import emit, join_room, leave_room
     import flask_socketio
     import sys
 except Exception as e:
@@ -59,19 +59,26 @@ def leaderboard():
 def test_connect(auth):
     global counter
     emit('my response', {'data': 'Connected'})
-    if counter % 2 == 0:
-        emit('state and player', {'State': 1, 'Player': 'X'})
-    else:
-        emit('state and player', {'State': 0, 'Player': 'O'})
-
-    print("COUNTER: " + str(counter), file=sys.stderr)
-    counter += 1
     sid = request.sid
-    print("MADE IT HERE: " + sid, file=sys.stderr)
+    if counter % 2 == 0:
+        room = counter
+        # db.delete_rooms()
+        db.assign_room(current_user.username, room)
+        join_room(str(room))
+        emit('state and player and room', {'State': 1, 'Player': 'X', 'Room': room})
+    else:
+        room = counter - 1
+        # db.delete_rooms()
+        db.assign_room(current_user.username, room)
+        join_room(str(room))
+        emit('state and player and room', {'State': 0, 'Player': 'O', 'Room': room})
+
+    counter += 1
 
     @globals.socketsio.on('player move')
     def test_messages(msg):
-        print("MADE IT HERE: " + str(msg), file=sys.stderr)
-        emit('opponent move', msg, broadcast=True, include_self=False)
+        room = db.get_users_room(current_user.username).get('room')
+        print("ROOMS: " + str(room), file=sys.stderr)
+        emit('opponent move', msg, to=str(room), include_self=False)
 
 

@@ -16,7 +16,6 @@ function set_player(value) {
 // Event Handler for clicking game board
 function triggerButton (buttonID, socket) {
     let button = document.getElementById(buttonID);
-    console.log(button.innerText)
     if (state && (button.innerText !== 'X' && button.innerText !== 'O')) {
         myMoves.push(buttonID)
         if (player === 'X') {

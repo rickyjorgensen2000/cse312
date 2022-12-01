@@ -11,6 +11,7 @@ db = mongodb_client.db
 
 user_collection = db['users']
 leaderboard = db['leaderboard']
+rooms_collection = db['rooms']
 
 # add user as {'username' : username, 'wins' : '0', 'loss' : '0'}
 
@@ -93,4 +94,19 @@ def get_leaderboard():
 def drop(collection):
     collection.drop()
 
+
+def assign_room(username, room):
+    record = {'username': username, 'room': room}
+    if get_users_room(username) is not None:
+        rooms_collection.update_one({'username': username}, {"$set": record})
+    else:
+        rooms_collection.insert_one(record)
+
+
+def get_users_room(username):
+    return rooms_collection.find_one({'username': username})
+
+
+def delete_rooms():
+    rooms_collection.delete_many({})
 

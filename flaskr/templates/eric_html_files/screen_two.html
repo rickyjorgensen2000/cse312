@@ -13,16 +13,15 @@
         // Test Message to server
         // socket.emit("hello from client", "Test Message?");
         // Test Message from the server
-        socket.on("state and player", (message) => {
-          console.log(message);
+        socket.on("state and player and room", (message) => {
           let state = message['State'];
           let player = message['Player'];
+          let room = message['Room']
           set_state(state);
           set_player(player);
         });
 
         socket.on("opponent move", (msg) => {
-          console.log(msg);
           let opponents_move = msg['ButtonID'];
           update_opponent_move(opponents_move);
 
