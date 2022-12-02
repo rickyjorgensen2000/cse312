@@ -6,13 +6,16 @@
     <script src ="/static/game.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js" integrity="sha512-q/dWJ3kcmjBLU4Qc47E4A9kTB4m3wuTY7vkFJDTZKjTs8jhyGQnaUrxa0Ytd0ssMZhbNua9hE+E7Qv1j+DyZwA==" crossorigin="anonymous"></script>
     <script type="text/javascript" charset="utf-8">
-        var socket = io();
+        let wsProtocol = "wss";
+        if (window.location.protocol === "http:") {
+          wsProtocol = "ws";
+        }
+        console.log(wsProtocol + "://" + location.host);
+        const socket = io({transports: ["websocket"]});
+        // const socket = io();
         socket.on("connect", function() {
             socket.emit("my event", {data: "I\'m connected!"});
         });
-        // Test Message to server
-        // socket.emit("hello from client", "Test Message?");
-        // Test Message from the server
         socket.on("state and player and room", (message) => {
           let state = message['State'];
           let player = message['Player'];
@@ -26,7 +29,7 @@
           update_opponent_move(opponents_move);
 
         });
-    </script>
+    </script> 
 </head>
 <h1>TIC TAC TOE</h1>
     
