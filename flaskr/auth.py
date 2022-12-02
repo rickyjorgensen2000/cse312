@@ -1,9 +1,10 @@
-from flask_login import login_user, login_required, logout_user, UserMixin, LoginManager
+from flask_login import login_user, login_required, logout_user, UserMixin, LoginManager, current_user
 from flask import Blueprint, render_template, redirect, url_for, flash, request
 from flaskr.db import user_collection
 import flaskr.db, bcrypt, sys
 from flaskr.models import User
 import html
+import flaskr.db as db
 
 auth = Blueprint('auth', __name__)
 
@@ -61,3 +62,24 @@ def signup_post():
     flaskr.db.add_user(name, hashed_password)
 
     return redirect(url_for('auth.login'))
+
+
+@auth.route("/update_profile", methods=['POST'])
+@login_required
+def update_profile():
+    old_pass = request.form.get('oldPassword')
+    new_pass = request.form.get('newPassword')
+
+    user = current_user.username
+    user_from_db = user_collection.find_one({'username': user})
+
+    # check if the user actually exists
+    # take the user-supplied password, hash it, and compare it to the hashed password in the database
+    if not user or not current_user.check_password(old_pass.encode(), user_from_db.get('password')):
+        flash('Please check your password and try again.', 'danger')
+        return redirect(url_for('main.profile'))  # if the user doesn't exist or password is wrong, reload the page
+    else:
+        hashed_password = bcrypt.hashpw(new_pass.encode(), bcrypt.gensalt())
+        db.update_password(user, hashed_password)
+        flash('Password updated successfully!', 'success')
+        return redirect(url_for('main.profile'))

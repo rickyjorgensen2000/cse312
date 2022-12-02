@@ -30,6 +30,15 @@ def check_for_user(username):
         return None
 
 
+def update_password(username, password):
+    user = user_collection.find_one({'username': username})
+    wins = user['wins']
+    losses = user['loss']
+    draws = user['draw']
+    new_record = {'$set': {'username': username, 'password': password, 'wins': wins, 'loss': losses, 'draw': draws}}
+    user_collection.update_one({'username': username}, new_record)
+
+
 # add a win or loss to the users stats
 
 
