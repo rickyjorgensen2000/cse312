@@ -134,6 +134,9 @@ def get_lobbies():
     return ret_val
 
 
+def delete_lobby(lobby):
+    lobby_collection.delete_one({'lobby': lobby})
+
 
 
 def delete_lobbies():

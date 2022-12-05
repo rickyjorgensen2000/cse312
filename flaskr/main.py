@@ -41,11 +41,13 @@ def game():
 
 @main.route('/waiting_room/<waiting_room_id>')
 @login_required
-# Check if lobby exists here? -> If not create the lobby? 
-# If it does exits -> remove it from the list? 
 def waiting_room(waiting_room_id):
+    # Create Lobby 
     if '/waiting_room/' + waiting_room_id not in db.get_lobbies():
         db.create_lobby('/waiting_room/' + str(waiting_room_id))
+    # If the lobby already exists remove it as we don't want more than 2 people per lobby
+    else:
+        db.delete_lobby('/waiting_room/' + waiting_room_id)
     return render_template('waiting_room.html')
 
 
