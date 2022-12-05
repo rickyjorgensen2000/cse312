@@ -44,24 +44,31 @@ def waiting_room():
     return render_template('waiting_room.html')
 
 
+@main.route('/game_over')
+@login_required
+def game_over():
+    return render_template('game_over.html')
+
+
 @main.route('/board')
 @login_required
 def board():
     return render_template('eric_html_files/screen_two.html')
 
+
 @main.route('/leaderboard')
 @login_required
 def leaderboard():
     all_users_data_dict = db.get_leaderboard()
-    rank=[]
-    record=[]
+    rank = []
+    record = []
     print(all_users_data_dict)
 
     for key in all_users_data_dict:
         rank.append(rank)
         record.append(all_users_data_dict[key])
 
-    return render_template('leaderboard.html', win_loss_list = record)
+    return render_template('leaderboard.html', win_loss_list=record)
 
 
 @main.route('/lobbies')
@@ -89,6 +96,7 @@ def test_connect(auth):
         emit('state and player and room', {'State': 0, 'Player': 'O', 'Room': room})
 
     counter += 1
+
 
 @globals.socketsio.on('player move')
 def test_messages(msg):
