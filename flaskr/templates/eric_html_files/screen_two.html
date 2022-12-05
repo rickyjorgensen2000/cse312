@@ -4,24 +4,50 @@
     <title>TIC TAC TOE</title>
     <link rel="stylesheet" type="text/css" href="../../static/board.css" />
     <script src ="/static/game.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js" integrity="sha512-q/dWJ3kcmjBLU4Qc47E4A9kTB4m3wuTY7vkFJDTZKjTs8jhyGQnaUrxa0Ytd0ssMZhbNua9hE+E7Qv1j+DyZwA==" crossorigin="anonymous"></script>
+    <script type="text/javascript" charset="utf-8">
+        let wsProtocol = "wss";
+        if (window.location.protocol === "http:") {
+          wsProtocol = "ws";
+        }
+        console.log(wsProtocol + "://" + location.host);
+        const socket = io({transports: ["websocket"]});
+        // const socket = io();
+        socket.on("connect", function() {
+            socket.emit("my event", {data: "I\'m connected!"});
+        });
+        socket.on("state and player and room", (message) => {
+          let state = message['State'];
+          let player = message['Player'];
+          let room = message['Room']
+          set_state(state);
+          set_player(player);
+        });
+
+        socket.on("opponent move", (msg) => {
+          let opponents_move = msg['ButtonID'];
+          update_opponent_move(opponents_move);
+
+        });
+    </script> 
 </head>
 <h1>TIC TAC TOE</h1>
     
 <table>
     <tr>
-      <td><button class="button1" id="button1" onclick="triggerButton('button1');">-----</button></td>
-      <td class="vert"><button class="button2" id="button2" onclick="triggerButton('button2');">Button2</button></td>
-      <td><button class="button3" id="button3" onclick="triggerButton('button3');">Button3</button></td>
+      <td><button class="button1" id="button1" onclick="triggerButton('button1', socket);">-----</button></td>
+      <td class="vert"><button class="button2" id="button2" onclick="triggerButton('button2', socket);">Button2</button></td>
+      <td><button class="button3" id="button3" onclick="triggerButton('button3', socket);">Button3</button></td>
     </tr>
     <tr>
-      <td class="hori"><button class="button4" id="button4" onclick="triggerButton('button4');">Button4</button></td>
-      <td class="vert hori"><button class="button5" id="button5" onclick="triggerButton('button5');">Button5</button></td>
-      <td class="hori"><button class="button6" id="button6" onclick="triggerButton('button6');">Button6</button></td>
+      <td class="hori"><button class="button4" id="button4" onclick="triggerButton('button4', socket);">Button4</button></td>
+      <td class="vert hori"><button class="button5" id="button5" onclick="triggerButton('button5', socket);">Button5</button></td>
+      <td class="hori"><button class="button6" id="button6" onclick="triggerButton('button6', socket);">Button6</button></td>
     </tr>
     <tr>
-      <td><button class="button7" id="button7" onclick="triggerButton('button7');">Button7</button></td>
-      <td class="vert"><button class="button8" id="button8" onclick="triggerButton('button8');">Button8</button></td>
-      <td><button class="button9" id="button9" onclick="triggerButton('button9');">Button9</button></td>
+      <td><button class="button7" id="button7" onclick="triggerButton('button7', socket);">Button7</button></td>
+      <td class="vert"><button class="button8" id="button8" onclick="triggerButton('button8', socket);">Button8</button></td>
+      <td><button class="button9" id="button9" onclick="triggerButton('button9', socket);">Button9</button></td>
     </tr>
   </table>
 

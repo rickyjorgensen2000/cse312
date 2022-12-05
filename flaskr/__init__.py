@@ -3,12 +3,17 @@ from flask import Flask
 from flask_login import LoginManager
 import flaskr.db
 from flaskr.models import User
+from flask_socketio import SocketIO, emit
+import flaskr.globals as globals
 
 
 def create_app(test_config=None):
+    globals.init()
     app = Flask(__name__, instance_relative_config=True)
+    app.config['SECRET_KEY'] = 'secret!'
     login = LoginManager()
     login.init_app(app)
+    globals.socketsio = SocketIO(app)
     # login.login_view = 'login'
 
     app.config.from_mapping(

@@ -11,6 +11,7 @@ db = mongodb_client.db
 
 user_collection = db['users']
 leaderboard = db['leaderboard']
+rooms_collection = db['rooms']
 
 # add user as {'username' : username, 'wins' : '0', 'loss' : '0'}
 
@@ -27,6 +28,15 @@ def check_for_user(username):
         return result
     else:
         return None
+
+
+def update_password(username, password):
+    user = user_collection.find_one({'username': username})
+    wins = user['wins']
+    losses = user['loss']
+    draws = user['draw']
+    new_record = {'$set': {'username': username, 'password': password, 'wins': wins, 'loss': losses, 'draw': draws}}
+    user_collection.update_one({'username': username}, new_record)
 
 
 # add a win or loss to the users stats
@@ -93,4 +103,19 @@ def get_leaderboard():
 def drop(collection):
     collection.drop()
 
+
+def assign_room(username, room):
+    record = {'username': username, 'room': room}
+    if get_users_room(username) is not None:
+        rooms_collection.update_one({'username': username}, {"$set": record})
+    else:
+        rooms_collection.insert_one(record)
+
+
+def get_users_room(username):
+    return rooms_collection.find_one({'username': username})
+
+
+def delete_rooms():
+    rooms_collection.delete_many({})
 

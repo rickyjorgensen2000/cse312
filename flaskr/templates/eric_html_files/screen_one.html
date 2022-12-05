@@ -3,7 +3,6 @@
 <head>
     <title>TIC TAC TOE</title>
     <link rel="stylesheet" type="text/css" href="../../static/style.css" />
-
 </head>
 
 <h1>TIC TAC TOE</h1>
@@ -12,17 +11,16 @@
 <img src = "../../static/images/backgroung.png" alt="basic starting picture">
 <br>
 <br>
-<form action="/board" method="get">
-<button type="submit" class = "start_button">
+<button type="button" class = "start_button">
     <a href="{{ url_for('main.board') }}" class="navbar-item">Start Game</a>
-</button>
-</form>
+    <!-- <a href="{{ url_for('main.waiting_room') }}" class="navbar-item">Start Game</a> -->
 
-<form action="/leaderboard" method="get">
-<button type= "submit" class = "leaderboard_button">
+</button>
+
+<button type= "button2" class = "leaderboard_button">
     <a href="{{ url_for('main.leaderboard') }}" class="navbar-item"> Leaderboard</a>
 </button>
-</form>
+
 
 
     
