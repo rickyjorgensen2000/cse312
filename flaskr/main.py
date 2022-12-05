@@ -64,6 +64,12 @@ def leaderboard():
     return render_template('leaderboard.html', win_loss_list = record)
 
 
+@main.route('/lobbies')
+@login_required
+def lobbies():
+    return render_template('lobbies.html')
+
+
 @globals.socketsio.on('connect')
 def test_connect(auth):
     global counter
@@ -84,7 +90,13 @@ def test_connect(auth):
 
     counter += 1
 
-    @globals.socketsio.on('player move')
-    def test_messages(msg):
-        room = db.get_users_room(current_user.username).get('room')
-        emit('opponent move', msg, to=str(room), include_self=False)
+@globals.socketsio.on('player move')
+def test_messages(msg):
+    room = db.get_users_room(current_user.username).get('room')
+    emit('opponent move', msg, to=str(room), include_self=False)
+
+
+@globals.socketsio.on('disconnected')
+def disconnect():
+    print("Disconnected", file=sys.stderr)
+    # emit('end')
