@@ -29,8 +29,10 @@ function triggerButton (buttonID, socket) {
             socket.emit('player move', {'ButtonID': buttonID})
         }
         button.style.visibility = 'visible'
-        let myWin = check_game_state(myMoves)
-        state = 0;
+        if (check_game_state(oppMoves)) {
+            socket.omit('win',{'player': player})
+    }
+        set_state(0);
 
     }
 }
@@ -51,7 +53,14 @@ function update_opponent_move (buttonID) {
     // check if the opponent won with last move
     if (check_game_state(oppMoves)) {
         set_state(0);
-        socket.omit('win',{'player': player})
+        let otherPlayer;
+        if (player === 'X'){
+            otherPlayer = 'O';
+        }
+        else {
+            otherPlayer = 'X';
+        }
+        socket.omit('win',{'player': otherPlayer})
     }
     else{
         set_state(1);
