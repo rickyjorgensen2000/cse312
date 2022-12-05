@@ -2,6 +2,7 @@ from flask import Flask
 from flask_pymongo import PyMongo
 from operator import itemgetter
 from flask_login import LoginManager
+import sys
 # Initialize mongo db with app
 app = Flask(__name__)
 
@@ -12,6 +13,7 @@ db = mongodb_client.db
 user_collection = db['users']
 leaderboard = db['leaderboard']
 rooms_collection = db['rooms']
+lobby_collection = db['lobbies']
 
 # add user as {'username' : username, 'wins' : '0', 'loss' : '0'}
 
@@ -119,3 +121,20 @@ def get_users_room(username):
 def delete_rooms():
     rooms_collection.delete_many({})
 
+
+def create_lobby(lobby):
+    lobby_collection.insert_one({'lobby': lobby})
+
+
+def get_lobbies():
+    lobbies = list(lobby_collection.find({}))
+    ret_val = []
+    for lobby in lobbies:
+        ret_val.append(lobby.get('lobby'))
+    return ret_val
+
+
+
+
+def delete_lobbies():
+    lobby_collection.delete_many({})

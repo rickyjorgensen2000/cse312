@@ -21,6 +21,7 @@ counter = 0
 
 @main.route('/')
 def index():
+    # db.delete_lobbies()
     return render_template('index.html')
 
 
@@ -40,7 +41,11 @@ def game():
 
 @main.route('/waiting_room/<waiting_room_id>')
 @login_required
+# Check if lobby exists here? -> If not create the lobby? 
+# If it does exits -> remove it from the list? 
 def waiting_room(waiting_room_id):
+    if '/waiting_room/' + waiting_room_id not in db.get_lobbies():
+        db.create_lobby('/waiting_room/' + str(waiting_room_id))
     return render_template('waiting_room.html')
 
 
@@ -75,7 +80,10 @@ def leaderboard():
 @main.route('/lobbies')
 @login_required
 def lobbies():
-    return render_template('lobbies.html')
+    # active_lobbies = ['/waiting_room/7bf6e398', '/waiting_room/5bf6e774']
+    active_lobbies = db.get_lobbies()
+    print(active_lobbies, file=sys.stderr)
+    return render_template('lobbies.html', created_lobbies = active_lobbies)
 
 
 @globals.socketsio.on('connect')
@@ -84,15 +92,11 @@ def test_connect(auth):
     emit('my response', {'data': 'Connected'})
     sid = request.sid
     if counter % 2 == 0:
-        room = counter
-        # db.delete_rooms()
-        db.assign_room(current_user.username, room)
+        room = db.get_users_room(current_user.username).get('room')
         join_room(str(room))
         emit('state and player and room', {'State': 1, 'Player': 'X', 'Room': room})
     else:
-        room = counter - 1
-        # db.delete_rooms()
-        db.assign_room(current_user.username, room)
+        room = db.get_users_room(current_user.username).get('room')
         join_room(str(room))
         emit('state and player and room', {'State': 0, 'Player': 'O', 'Room': room})
 

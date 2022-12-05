@@ -2,7 +2,16 @@
 
 {% block content %}
 <br>
-<h1 class="title">Lobbies</h1>
+<h1 class="title">Open Lobbies</h1>
+
+{% for lobby in created_lobbies %}
+<button class="lobby_button" id="lobby_button_id">
+    <a href="{{ lobby }}" id="lobby_list">Lobby {{ loop.index }}</a>
+</button>
+<br>
+{% endfor %}
+
+<br>
 
 <button class ="waitingRoom_ button" id="waiting_room">
     <a href="#" id="waiting_room_link">Create Lobby</a>
