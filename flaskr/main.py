@@ -38,9 +38,9 @@ def game():
     return render_template('eric_html_files/screen_one.html')
 
 
-@main.route('/waiting_room')
+@main.route('/waiting_room/<waiting_room_id>')
 @login_required
-def waiting_room():
+def waiting_room(waiting_room_id):
     return render_template('waiting_room.html')
 
 
@@ -50,9 +50,10 @@ def game_over():
     return render_template('game_over.html')
 
 
-@main.route('/board')
+@main.route('/board/<game_id>')
 @login_required
-def board():
+def board(game_id):
+    db.assign_room(current_user.username, game_id)
     return render_template('eric_html_files/screen_two.html')
 
 

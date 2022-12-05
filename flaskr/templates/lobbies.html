@@ -4,4 +4,13 @@
 <br>
 <h1 class="title">Lobbies</h1>
 
+<button class ="waitingRoom_ button" id="waiting_room">
+    <a href="#" id="waiting_room_link">Create Lobby</a>
+</button>
+<script>
+    let dynamic_path = "/" + Math.random().toString(16).substr(2, 8);
+    let link = document.getElementById("waiting_room_link");
+    link.setAttribute('href', "/waiting_room" + dynamic_path);
+</script>
+
 {% endblock %}
