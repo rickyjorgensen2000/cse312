@@ -45,7 +45,7 @@ def logout():
 
 @auth.route('/signup', methods=['POST'])
 def signup_post():
-    username  = request.form.get('name')
+    username = request.form.get('name')
     name = html.escape(username)
     password = request.form.get('password')
     # hashes and salts the password for storage in the database

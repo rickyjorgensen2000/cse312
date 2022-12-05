@@ -2,7 +2,7 @@
 // Buttons will be linked to this file
 
 
-const socket = new WebSocket('ws://' + window.location.host + '/websocket');
+const socket = new WebSocket('ws://' + window.location.host);
 
 let webRTCConnection;
 let player = '';
