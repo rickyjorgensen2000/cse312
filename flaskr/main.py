@@ -61,6 +61,12 @@ def game_over():
 @login_required
 def board(game_id):
     db.assign_room(current_user.username, game_id)
+    # Create Lobby 
+    if '/board/' + game_id not in db.get_lobbies():
+        db.create_lobby('/board/' + str(game_id))
+    # If the lobby already exists remove it as we don't want more than 2 people per lobby
+    else:
+        db.delete_lobby('/board/' + game_id)
     return render_template('eric_html_files/screen_two.html')
 
 
@@ -109,6 +115,11 @@ def test_connect(auth):
 def test_messages(msg):
     room = db.get_users_room(current_user.username).get('room')
     emit('opponent move', msg, to=str(room), include_self=False)
+
+
+@globals.socketsio.on('win')
+def player_win(msg):
+    print(msg, file=sys.stderr)
 
 
 @globals.socketsio.on('disconnected')

@@ -29,15 +29,18 @@ function triggerButton (buttonID, socket) {
             socket.emit('player move', {'ButtonID': buttonID})
         }
         button.style.visibility = 'visible'
-        if (check_game_state(oppMoves)) {
-            socket.omit('win',{'player': player})
-    }
-        set_state(0);
-
+        if (check_game_state(myMoves)) {
+            socket.emit('win', {'player': player});
+            set_state(0);
+        }
+        else{
+            set_state(0);
+        }
     }
 }
 
-function update_opponent_move (buttonID) {
+
+function update_opponent_move (buttonID, socket) {
     let button = document.getElementById(buttonID);
     oppMoves.push(parseInt(buttonID))
     switch (player) {
@@ -60,7 +63,7 @@ function update_opponent_move (buttonID) {
         else {
             otherPlayer = 'X';
         }
-        socket.omit('win',{'player': otherPlayer})
+        socket.emit('win', {'player': otherPlayer});
     }
     else{
         set_state(1);
@@ -68,31 +71,27 @@ function update_opponent_move (buttonID) {
 }
 // check if a player has won
 function check_game_state(moves) {
-        const winConditions = [
-            [1, 2, 3],
-            [1, 5, 9],
-            [1, 4, 7],
-            [4, 5, 6],
-            [2, 5, 8],
-            [7, 8, 9],
-            [3, 6, 9],
-            [3, 5, 7]
-        ];
-        let win = false
-        for (let condition in winConditions) {
-            let count = 0;
-            for (let move in condition) {
-                if (moves.prototype.includes(move)) {
-                    count++;
-                }
-                else {
-                    break;
-                }
+    const winConditions = [
+        [1, 2, 3],
+        [1, 5, 9],
+        [1, 4, 7],
+        [4, 5, 6],
+        [2, 5, 8],
+        [7, 8, 9],
+        [3, 6, 9],
+        [3, 5, 7]
+    ];
+
+    for (let win_condition of winConditions) {
+        let counter = 0;
+        for (let move of win_condition) {
+            if (moves.includes(move)) {
+                counter += 1;
             }
-            if (count === 3) {
-                win = true;
-                break
+            if (counter === 3) {
+                return true
             }
         }
-        return win
+    }
+    return false;
 }

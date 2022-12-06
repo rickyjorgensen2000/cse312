@@ -26,8 +26,7 @@
 
         socket.on("opponent move", (msg) => {
           let opponents_move = msg['ButtonID'];
-          update_opponent_move(opponents_move);
-
+          update_opponent_move(opponents_move, socket);
         });
     </script> 
 </head>
@@ -35,19 +34,19 @@
     
 <table>
     <tr>
-      <td><button class="button1" id="button1" onclick="triggerButton('button1', socket);">-----</button></td>
-      <td class="vert"><button class="button2" id="button2" onclick="triggerButton('button2', socket);">Button2</button></td>
-      <td><button class="button3" id="button3" onclick="triggerButton('button3', socket);">Button3</button></td>
+      <td><button class="button1" id="1" onclick="triggerButton('1', socket);">Button1</button></td>
+      <td class="vert"><button class="button2" id="2" onclick="triggerButton('2', socket);">Button2</button></td>
+      <td><button class="button3" id="3" onclick="triggerButton('3', socket);">Button3</button></td>
     </tr>
     <tr>
-      <td class="hori"><button class="button4" id="button4" onclick="triggerButton('button4', socket);">Button4</button></td>
-      <td class="vert hori"><button class="button5" id="button5" onclick="triggerButton('button5', socket);">Button5</button></td>
-      <td class="hori"><button class="button6" id="button6" onclick="triggerButton('button6', socket);">Button6</button></td>
+      <td class="hori"><button class="button4" id="4" onclick="triggerButton('4', socket);">Button4</button></td>
+      <td class="vert hori"><button class="button5" id="5" onclick="triggerButton('5', socket);">Button5</button></td>
+      <td class="hori"><button class="button6" id="6" onclick="triggerButton('6', socket);">Button6</button></td>
     </tr>
     <tr>
-      <td><button class="button7" id="button7" onclick="triggerButton('button7', socket);">Button7</button></td>
-      <td class="vert"><button class="button8" id="button8" onclick="triggerButton('button8', socket);">Button8</button></td>
-      <td><button class="button9" id="button9" onclick="triggerButton('button9', socket);">Button9</button></td>
+      <td><button class="button7" id="7" onclick="triggerButton('7', socket);">Button7</button></td>
+      <td class="vert"><button class="button8" id="8" onclick="triggerButton('8', socket);">Button8</button></td>
+      <td><button class="button9" id="9" onclick="triggerButton('9', socket);">Button9</button></td>
     </tr>
   </table>
 

@@ -19,7 +19,8 @@
 <script>
     let dynamic_path = "/" + Math.random().toString(16).substr(2, 8);
     let link = document.getElementById("waiting_room_link");
-    link.setAttribute('href', "/waiting_room" + dynamic_path);
+    // link.setAttribute('href', "/waiting_room" + dynamic_path);
+    link.setAttribute('href', "/board" + dynamic_path);
 </script>
 
 {% endblock %}
