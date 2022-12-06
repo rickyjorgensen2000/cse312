@@ -95,3 +95,8 @@ function check_game_state(moves) {
     }
     return false;
 }
+
+
+function change_screen(winner) { 
+    window.location.href = "/game_over/" + winner.toString();
+}

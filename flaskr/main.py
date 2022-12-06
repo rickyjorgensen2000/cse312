@@ -51,10 +51,15 @@ def waiting_room(waiting_room_id):
     return render_template('waiting_room.html')
 
 
-@main.route('/game_over')
+@main.route('/game_over/X')
 @login_required
-def game_over():
-    return render_template('game_over.html')
+def game_over_x():
+    return render_template('game_over.html', game_winner="X")
+
+@main.route('/game_over/O')
+@login_required
+def game_over_o():
+    return render_template('game_over.html', game_winner="O")
 
 
 @main.route('/board/<game_id>')
@@ -88,9 +93,7 @@ def leaderboard():
 @main.route('/lobbies')
 @login_required
 def lobbies():
-    # active_lobbies = ['/waiting_room/7bf6e398', '/waiting_room/5bf6e774']
     active_lobbies = db.get_lobbies()
-    print(active_lobbies, file=sys.stderr)
     return render_template('lobbies.html', created_lobbies = active_lobbies)
 
 
@@ -101,10 +104,14 @@ def test_connect(auth):
     sid = request.sid
     if counter % 2 == 0:
         room = db.get_users_room(current_user.username).get('room')
+        print(room, file=sys.stderr)
+        print("STATE 1: ", file=sys.stderr)
         join_room(str(room))
         emit('state and player and room', {'State': 1, 'Player': 'X', 'Room': room})
     else:
         room = db.get_users_room(current_user.username).get('room')
+        print(room, file=sys.stderr)
+        print("STATE 0: ", file=sys.stderr)
         join_room(str(room))
         emit('state and player and room', {'State': 0, 'Player': 'O', 'Room': room})
 
@@ -119,7 +126,8 @@ def test_messages(msg):
 
 @globals.socketsio.on('win')
 def player_win(msg):
-    print(msg, file=sys.stderr)
+    room = db.get_users_room(current_user.username).get('room')
+    emit('Winner', msg, to=str(room), include_self=False)
 
 
 @globals.socketsio.on('disconnected')
