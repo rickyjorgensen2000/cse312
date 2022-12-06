@@ -2,6 +2,7 @@ let state = 0
 let player = ''
 let myMoves = [];
 let oppMoves = [];
+let allMoves = [];
 
 
 function set_state(value) {
@@ -17,7 +18,8 @@ function set_player(value) {
 function triggerButton (buttonID, socket) {
     let button = document.getElementById(buttonID);
     if (state && (button.innerText !== 'X' && button.innerText !== 'O')) {
-        myMoves.push(parseInt(buttonID))
+        myMoves.push(parseInt(buttonID));
+        allMoves.push(parseInt(buttonID));
         if (player === 'X') {
             button.style.opacity = '1';
             button.innerText = 'X';
@@ -29,7 +31,7 @@ function triggerButton (buttonID, socket) {
             socket.emit('player move', {'ButtonID': buttonID})
         }
         button.style.visibility = 'visible'
-        if (check_game_state(myMoves)) {
+        if (check_game_state(myMoves, socket)) {
             socket.emit('win', {'player': player});
             set_state(0);
         }
@@ -42,7 +44,8 @@ function triggerButton (buttonID, socket) {
 
 function update_opponent_move (buttonID, socket) {
     let button = document.getElementById(buttonID);
-    oppMoves.push(parseInt(buttonID))
+    oppMoves.push(parseInt(buttonID));
+    allMoves.push(parseInt(buttonID));
     switch (player) {
         case 'X':
             button.style.opacity = '1';
@@ -54,7 +57,7 @@ function update_opponent_move (buttonID, socket) {
             break
     }
     // check if the opponent won with last move
-    if (check_game_state(oppMoves)) {
+    if (check_game_state(oppMoves, socket)) {
         set_state(0);
         let otherPlayer;
         if (player === 'X'){
@@ -70,7 +73,7 @@ function update_opponent_move (buttonID, socket) {
     }
 }
 // check if a player has won
-function check_game_state(moves) {
+function check_game_state(moves, socket) {
     const winConditions = [
         [1, 2, 3],
         [1, 5, 9],
@@ -93,10 +96,19 @@ function check_game_state(moves) {
             }
         }
     }
+
+    if (allMoves.length === 9) {
+        socket.emit('draw', {'draw': "draw"});
+    }
+
     return false;
 }
 
 
 function change_screen(winner) { 
     window.location.href = "/game_over/" + winner.toString();
+}
+
+function draw_game() {
+    window.location.href = "/draw_game";
 }

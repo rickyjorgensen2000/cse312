@@ -17,7 +17,6 @@
             socket.emit("my event", {data: "I\'m connected!"});
         });
         socket.on("state and player and room", (message) => {
-          console.log(message);
           let state = message['State'];
           let player = message['Player'];
           let room = message['Room'];
@@ -26,11 +25,13 @@
         });
         socket.on("opponent move", (msg) => {
           let opponents_move = msg['ButtonID'];
-          console.log(msg);
           update_opponent_move(opponents_move, socket);
         });
         socket.on("Winner", (msg) => {
           change_screen(msg['player']);
+        });
+        socket.on("Draw", (msg) => {
+          draw_game();
         });
     </script> 
 </head>
