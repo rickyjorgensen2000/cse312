@@ -17,6 +17,7 @@
             socket.emit("my event", {data: "I\'m connected!"});
         });
         socket.on("state and player and room", (message) => {
+          console.log(message);
           let state = message['State'];
           let player = message['Player'];
           let room = message['Room'];

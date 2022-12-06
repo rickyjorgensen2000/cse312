@@ -122,8 +122,8 @@ def delete_rooms():
     rooms_collection.delete_many({})
 
 
-def create_lobby(lobby):
-    lobby_collection.insert_one({'lobby': lobby})
+def create_lobby(lobby, username):
+    lobby_collection.insert_one({'lobby': lobby, 'user1': username})
 
 
 def get_lobbies():
@@ -132,6 +132,11 @@ def get_lobbies():
     for lobby in lobbies:
         ret_val.append(lobby.get('lobby'))
     return ret_val
+
+
+def get_lobby(username):
+    print(lobby_collection.find_one({'user1': username}))
+    return lobby_collection.find_one({'user1': username})
 
 
 def delete_lobby(lobby):

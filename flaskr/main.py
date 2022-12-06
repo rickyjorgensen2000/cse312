@@ -74,7 +74,7 @@ def board(game_id):
     db.assign_room(current_user.username, game_id)
     # Create Lobby 
     if '/board/' + game_id not in db.get_lobbies():
-        db.create_lobby('/board/' + str(game_id))
+        db.create_lobby('/board/' + str(game_id), current_user.username)
     # If the lobby already exists remove it as we don't want more than 2 people per lobby
     else:
         db.delete_lobby('/board/' + game_id)
@@ -105,19 +105,20 @@ def lobbies():
 
 @globals.socketsio.on('connect')
 def test_connect(auth):
-    global counter
     emit('my response', {'data': 'Connected'})
     sid = request.sid
-    if counter % 2 == 0:
-        room = db.get_users_room(current_user.username).get('room')
+    # Get the room for the current user
+    room = db.get_users_room(current_user.username).get('room')
+    # Get the current users lobby information
+    user1 = db.get_lobby(current_user.username)
+    # If the user is user1 then they are player 'X'
+    if user1 is not None and current_user.username == user1.get('user1'):
         join_room(str(room))
         emit('state and player and room', {'State': 1, 'Player': 'X', 'Room': room})
     else:
-        room = db.get_users_room(current_user.username).get('room')
         join_room(str(room))
         emit('state and player and room', {'State': 0, 'Player': 'O', 'Room': room})
 
-    counter += 1
 
 
 @globals.socketsio.on('player move')
