@@ -92,7 +92,7 @@ def leaderboard():
     for key in all_users_data_dict:
         rank.append(rank)
         record.append(all_users_data_dict[key])
-        
+
     record.reverse()
 
     return render_template('leaderboard.html', win_loss_list=record)
@@ -149,7 +149,7 @@ def player_loss(msg):
 @globals.socketsio.on('draw')
 def draw(msg):
     room = db.get_users_room(current_user.username).get('room')
-    db.update_player_stats(current_user.usernmae, 'draw', 1)
+    db.update_player_stats(current_user.username, 'draw', 1)
     emit("Draw", msg, to=str(room), include_self=False)
 
 
