@@ -10,9 +10,8 @@
         if (window.location.protocol === "http:") {
           wsProtocol = "ws";
         }
-        console.log(wsProtocol + "://" + location.host);
-        const socket = io({transports: ["websocket"]});
-        // const socket = io();
+        // console.log(wsProtocol + "://" + location.host);
+        const socket = io(wsProtocol + '://' + location.host,{transports: ["websocket"], secure: true});
         socket.on("connect", function() {
             socket.emit("my event", {data: "I\'m connected!"});
         });
