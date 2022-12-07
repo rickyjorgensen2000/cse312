@@ -92,6 +92,8 @@ def leaderboard():
     for key in all_users_data_dict:
         rank.append(rank)
         record.append(all_users_data_dict[key])
+        
+    record.reverse()
 
     return render_template('leaderboard.html', win_loss_list=record)
 
@@ -130,12 +132,24 @@ def test_messages(msg):
 @globals.socketsio.on('win')
 def player_win(msg):
     room = db.get_users_room(current_user.username).get('room')
+    # if msg.get('player') != None:
+    db.update_player_stats(current_user.username, 'wins', 1)
+    # elif msg.get('otherPlayer') != None:
+        # db.update_player_stats(current_user.username, 'loss', 1)
     emit('Winner', msg, to=str(room), include_self=False)
+
+
+@globals.socketsio.on('loss')
+def player_loss(msg):
+    room = db.get_users_room(current_user.username).get('room')
+    db.update_player_stats(current_user.username, 'loss', 1)
+    emit('Loser', msg, to=str(room), include_self=False)
 
 
 @globals.socketsio.on('draw')
 def draw(msg):
     room = db.get_users_room(current_user.username).get('room')
+    db.update_player_stats(current_user.usernmae, 'draw', 1)
     emit("Draw", msg, to=str(room), include_self=False)
 
 

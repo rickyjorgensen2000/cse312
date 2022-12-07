@@ -66,7 +66,7 @@ function update_opponent_move (buttonID, socket) {
         else {
             otherPlayer = 'X';
         }
-        socket.emit('win', {'player': otherPlayer});
+        socket.emit('loss', {'player': otherPlayer});
     }
     else{
         set_state(1);

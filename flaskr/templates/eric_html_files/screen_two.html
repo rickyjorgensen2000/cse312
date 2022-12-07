@@ -34,6 +34,9 @@
         socket.on("Draw", (msg) => {
           draw_game();
         });
+        socket.on("Loser", (msg) => {
+          change_screen(msg['player']);
+        });
     </script> 
 </head>
 <h1>TIC TAC TOE</h1>

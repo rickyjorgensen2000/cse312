@@ -91,7 +91,7 @@ def get_leaderboard():
     for record in records:
         item = record.popitem()
         username = item[0]
-        score = item[1]
+        score = int(item[1])
         record_list.append([score, username])
     sorted_list = sorted(record_list, key=itemgetter(0))
     return_leaderboard = {}
