@@ -135,7 +135,6 @@ def get_lobbies():
 
 
 def get_lobby(username):
-    print(lobby_collection.find_one({'user1': username}))
     return lobby_collection.find_one({'user1': username})
 
 

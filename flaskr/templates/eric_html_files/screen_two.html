@@ -10,13 +10,11 @@
         if (window.location.protocol === "http:") {
           wsProtocol = "ws";
         }
-        // console.log(wsProtocol + "://" + location.host);
         const socket = io(wsProtocol + '://' + location.host,{transports: ["websocket"], secure: true});
         socket.on("connect", function() {
             socket.emit("my event", {data: "I\'m connected!"});
         });
         socket.on("state and player and room", (message) => {
-          console.log(message);
           let state = message['State'];
           let player = message['Player'];
           let room = message['Room'];

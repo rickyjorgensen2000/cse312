@@ -87,7 +87,6 @@ def leaderboard():
     all_users_data_dict = db.get_leaderboard()
     rank = []
     record = []
-    print(all_users_data_dict)
 
     for key in all_users_data_dict:
         rank.append(rank)
@@ -155,5 +154,4 @@ def draw(msg):
 
 @globals.socketsio.on('disconnected')
 def disconnect():
-    print("Disconnected", file=sys.stderr)
-    # emit('end')
+    pass
